@@ -15,7 +15,7 @@ def canUnlockAll(boxes):
         return False
 
     n = len(boxes)
-    visited = [False] * n
+    visited = [False] * n  # tracker des boîtes ouvertes
 
     def dfs(box):
         if visited[box]:
