@@ -1,29 +1,37 @@
 #!/usr/bin/python3
-"""
-0-lockboxes.py
 
-Module that contains a function to determine if all lockboxes can be opened.
 
-Requirements:
-- The first box (boxes[0]) is unlocked.
-- Each box may contain keys to other boxes.
-- A key opens the box with the same number.
-"""
+'''
+ canUnlockAll - Determine if all boxes can be unlocked.
+'''
+
 
 def canUnlockAll(boxes):
-    if not boxes or type(boxes) != list:
-        return False
+    '''Determine if all boxes can be unlocked.
 
-    n = len(boxes)
-    visited = [False] * n  # tracker des boîtes ouvertes
+    Args:
+        boxes (list of list of int): A list where each sublist represents
+                                      a box containing keys to other boxes.
+                                      Box 0 is initially unlocked.
+    Returns:
+        bool: True if all boxes can be unlocked, False otherwise.
+    '''
+    unlocked = set()
+    to_visit = [0]
 
-    def dfs(box):
-        if visited[box]:
-            return
-        visited[box] = True
-        for key in boxes[box]:
-            if 0 <= key < n:
-                dfs(key)
+    while to_visit:
+        current_box = to_visit.pop()
+        if not isinstance(current_box, int):
+            continue
+        if current_box < 0 or current_box >= len(boxes):
+            continue
 
-    dfs(0)
-    return all(visited)
+        if current_box not in unlocked:
+            unlocked.add(current_box)
+            for key in boxes[current_box]:
+                if not isinstance(key, int):
+                    continue
+                if 0 <= key < len(boxes) and key not in unlocked:
+                    to_visit.append(key)
+
+    return len(unlocked) == len(boxes)
